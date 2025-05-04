@@ -142,8 +142,6 @@ const Reports = () => {
     const handleDownloadPDF = async() => {
         const doc = new jsPDF();
         doc.text("Student Vaccination Reports", 14, 10);
-        let currPage = currentPage;
-        const currentStudents = filteredStudents
         const tableColumn = ["Name", "ID", "Class", "Vaccine Name", "Vaccine Date", "Vaccination Status"];
         let currentStudents = []
         if (filteredStudents.length === students.length) {
