@@ -194,9 +194,16 @@ export const UpdateVaccinationStatusModal = ({ isOpen,
                                 <option value="" disabled>
                                     -- Select Vaccine --
                                 </option>
-                                {Array.from(
+                                 {Array.from(
                                     new Set(
-                                        unregisteredVaccinations.map((vaccine) => vaccine.vaccineName)
+                                        unregisteredVaccinations
+                                            .filter(
+                                                (vaccine) =>
+                                                    !registeredVaccinations.some(
+                                                        (registeredVaccine) => registeredVaccine.vaccineName === vaccine.vaccineName
+                                                    )
+                                            )
+                                            .map((vaccine) => vaccine.vaccineName)
                                     )
                                 ).map((vaccineName, index) => (
                                     <option key={index} value={vaccineName}>
