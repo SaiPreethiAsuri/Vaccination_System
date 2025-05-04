@@ -82,8 +82,19 @@ const Reports = () => {
     const handleDownloadPDF = () => {
         const doc = new jsPDF();
         doc.text("Student Vaccination Reports", 14, 10);
+        let currPage=currentPage;
+        const currentStudents=filteredStudents
         const tableColumn = ["Name", "ID", "Class", "Vaccine Name", "Vaccine Date", "Vaccination Status"];
-        const tableRows = filteredStudents.flatMap((student) =>
+        while(currPage<= totalPages){
+            getAllStudents(currPage+1,10).then((res) => {
+                currentStudents.push(...res.students);
+            }
+            ).catch((err) => {
+                console.log(err);
+            })
+            currPage++;
+        }
+        const tableRows = currentStudents.flatMap((student) =>
             student.vaccinationStatus.length > 0
                 ? student.vaccinationStatus.map((status) => [
                     student.name,
