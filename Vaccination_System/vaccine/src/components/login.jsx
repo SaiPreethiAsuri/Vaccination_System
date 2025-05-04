@@ -9,10 +9,11 @@ import "./login.scss";
 const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [sessionExpired, setSessionExpired] = useState(false);
     const isTokenExpired = new URLSearchParams(location.search).get('expired') === 'true';
     useEffect(() => {
         if (isTokenExpired) {
-            alert("Session expired, please login again");
+            setSessionExpired(true);
         }
     }, [isTokenExpired]);
     const [adminUser, setAdminUser] = useState({ username: "", password: "" });
@@ -43,7 +44,14 @@ const Login = () => {
 
     }
     return (
+        <div>
+        {sessionExpired && (
+            <div className="session-expired-message">
+                Session expired, please login again.
+            </div>
+        )}
         <div className="login_container">
+           
             <div className="login_image_container">
                 <img
                     src={login}
@@ -70,7 +78,7 @@ const Login = () => {
             </div>
 
         </div>
-
+        </div>
     );
 }
 export default Login;
