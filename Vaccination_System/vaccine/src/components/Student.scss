@@ -1,0 +1,42 @@
+.student {
+    padding: 20px;
+}
+
+.add-student-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.add-student-btn:hover {
+    background-color: #45a049;
+}
+
+.edit-btn {
+    background-color: #008cba;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.edit-btn:hover {
+    background-color: #007bb5;
+}
+.filters input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.filters input:focus {
+    outline: none;
+    border-color: #007bb5;
+}

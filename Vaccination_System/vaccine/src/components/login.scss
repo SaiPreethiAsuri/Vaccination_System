@@ -1,0 +1,40 @@
+.login_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #fff;
+}
+
+.login_image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.login_image_container {
+    flex: 1;
+    display: flex;
+    position: relative;
+    left: 5%;
+    align-items: center;
+}
+
+.custom-form-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 200px;
+    position: static;
+
+}
+.login-field {
+    margin-bottom: 16px; 
+    font-family: 'Roboto Slab', serif;
+    width: 100%; 
+    padding: 8px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+  }
