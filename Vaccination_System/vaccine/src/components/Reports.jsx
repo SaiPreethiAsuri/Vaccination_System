@@ -49,8 +49,21 @@ const Reports = () => {
                 (filters.vaccineDate === "" || student.vaccinationStatus.some((s) => s.vaccine.date.toLowerCase().includes(filters.vaccineDate.toLowerCase())))
 
             );
-
-        }).filter((student) => {
+        })
+            .map((student) => {
+                // Only filter vaccinationStatus if a vaccineName filter is applied
+                if (filters.vaccineName !== "") {
+                    const filteredVaccinationStatus = student.vaccinationStatus.filter(
+                        (s) => s.vaccine.vaccineName.toLowerCase().includes(filters.vaccineName.toLowerCase())
+                    );
+                    return {
+                        ...student,
+                        vaccinationStatus: filteredVaccinationStatus,
+                    };
+                }
+                return student;
+            })
+            .filter((student) => {
             if (filters.vaccinationStatus.length === 0) {
                 return true; // No filter applied
             }
