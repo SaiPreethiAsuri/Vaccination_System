@@ -46,9 +46,22 @@ const Reports = () => {
                 (filters.name === "" || student.name.toLowerCase().includes(filters.name.toLowerCase())) &&
                 (filters.class === "" || student.class.toLowerCase().includes(filters.class.toLowerCase())) &&
                 (filters.vaccineName === "" || student.vaccinationStatus.some((s) => s.vaccine.vaccineName.toLowerCase().includes(filters.vaccineName.toLowerCase()))) &&
-                (filters.vaccineDate === "" || student.vaccinationStatus.some((s) => s.vaccine.date.toLowerCase().includes(filters.vaccineDate.toLowerCase())))
+                (filters.vaccineDate === "" ||
+                    student.vaccinationStatus.some((s) => {
+                        const vaccineDate = new Date(s.vaccine.date); // Convert vaccine date to Date object
+                        const filterDate = new Date(filters.vaccineDate); // Convert filter date to Date object
+
+                        // Compare only the date part (ignoring time)
+                        return (
+                            vaccineDate.getFullYear() === filterDate.getFullYear() &&
+                            vaccineDate.getMonth() === filterDate.getMonth() &&
+                            vaccineDate.getDate() === filterDate.getDate()
+                        );
+                    })
+                )
 
             );
+
         })
             .map((student) => {
                 // Only filter vaccinationStatus if a vaccineName filter is applied
@@ -61,24 +74,58 @@ const Reports = () => {
                         vaccinationStatus: filteredVaccinationStatus,
                     };
                 }
+                if (filters.vaccineDate !== "") {
+                    const filteredVaccinationStatus = student.vaccinationStatus.filter(
+                        (s) => {
+                            const vaccineDate = new Date(s.vaccine.date); // Convert vaccine date to Date object
+                            const filterDate = new Date(filters.vaccineDate); // Convert filter date to Date object
+
+                            // Compare only the date part (ignoring time)
+                            return (
+                                vaccineDate.getFullYear() === filterDate.getFullYear() &&
+                                vaccineDate.getMonth() === filterDate.getMonth() &&
+                                vaccineDate.getDate() === filterDate.getDate()
+                            );
+                        }
+                    );
+                    return {
+                        ...student,
+                        vaccinationStatus: filteredVaccinationStatus,
+                    };
+                }
+                if (filters.vaccinationStatus.length > 0) {
+                    const filteredVaccinationStatus = student.vaccinationStatus.filter(
+                        (s) => {
+                            if (filters.vaccinationStatus.includes("vaccinated")) {
+                                return s.status === true; // Include only vaccinated
+                            }
+                            if (filters.vaccinationStatus.includes("not vaccinated")) {
+                                return s.status === false; // Include only not vaccinated
+                            }
+                            return true; // Default case (no filtering)
+                        }
+                    );
+                    return {
+                        ...student,
+                        vaccinationStatus: filteredVaccinationStatus,
+                    };
+                }
                 return student;
             })
             .filter((student) => {
-            if (filters.vaccinationStatus.length === 0) {
-                return true; // No filter applied
-            }
+                if (filters.vaccinationStatus.length === 0) {
+                    return true;
+                }
+                const matchesVaccinated = filters.vaccinationStatus.includes("vaccinated") &&
+                    student.vaccinationStatus.some((s) => s.status === true);
 
-            // Check if any of the selected vaccination statuses match
-            const matchesVaccinated = filters.vaccinationStatus.includes("vaccinated") &&
-                student.vaccinationStatus.some((s) => s.status === true);
+                const matchesNotVaccinated = filters.vaccinationStatus.includes("not vaccinated") &&
+                    student.vaccinationStatus.some((s) => s.status === false);
 
-            const matchesNotVaccinated = filters.vaccinationStatus.includes("not vaccinated") &&
-                student.vaccinationStatus.some((s) => s.status === false);
-
-            const matchesNoVaccinationStatus = filters.vaccinationStatus.includes("no vaccination status") &&
-                student.vaccinationStatus.length === 0;
-            return matchesVaccinated || matchesNotVaccinated || matchesNoVaccinationStatus;
-        })
+                const matchesNoVaccinationStatus = filters.vaccinationStatus.includes("no vaccination status") &&
+                    student.vaccinationStatus.length === 0;
+                return matchesVaccinated || matchesNotVaccinated || matchesNoVaccinationStatus;
+            })
         setFilteredStudents(filtered);
         if (filtered.length !== students.length) {
 
@@ -92,14 +139,14 @@ const Reports = () => {
         const { name, value } = e.target;
         setFilters({ ...filters, [name]: value });
     };
-    const handleDownloadPDF = () => {
+    const handleDownloadPDF = async() => {
         const doc = new jsPDF();
         doc.text("Student Vaccination Reports", 14, 10);
-        let currPage=currentPage;
-        const currentStudents=filteredStudents
+        let currPage = currentPage;
+        const currentStudents = filteredStudents
         const tableColumn = ["Name", "ID", "Class", "Vaccine Name", "Vaccine Date", "Vaccination Status"];
-        while(currPage<= totalPages){
-            getAllStudents(currPage+1,10).then((res) => {
+        while (currPage <= totalPages) {
+            await getAllStudents(currPage + 1, 10).then((res) => {
                 currentStudents.push(...res.students);
             }
             ).catch((err) => {
@@ -177,14 +224,31 @@ const Reports = () => {
                         onChange={handleFilterChange}
                         style={{ marginRight: "10px", padding: "5px" }}
                     />
+                    <p style={{marginBottom:"20px"}}>Filter By Vaccine Date: </p>
                     <input
-                        type="text"
+                        type="date"
                         name="vaccineDate"
                         placeholder="Filter by Vaccine Date"
                         value={filters.vaccineDate}
                         onChange={handleFilterChange}
                         style={{ marginRight: "10px", padding: "5px" }}
                     />
+                    <button
+                        type="button"
+                        onClick={() => setFilters({ ...filters, vaccineDate: "" })} // Clear the vaccineDate filter
+                        style={{
+                            marginLeft: "5px",
+                            padding: "5px 10px",
+                            backgroundColor: "#f44336",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "3px",
+                            cursor: "pointer",
+                            marginBottom:"20px"
+                        }}
+                    >
+                        Clear
+                    </button>
                     <div className="form-group">
                         <label>Vaccination Status:</label>
                         <div>
@@ -290,7 +354,7 @@ const Reports = () => {
                             </tbody>
                         </table>
                     </div>}
-                    <div style={{ marginTop: "10px", textAlign: "center" }}>
+                <div style={{ marginTop: "10px", textAlign: "center" }}>
                     {Array.from({ length: totalPages }, (_, index) => (
                         <button
                             key={index}
