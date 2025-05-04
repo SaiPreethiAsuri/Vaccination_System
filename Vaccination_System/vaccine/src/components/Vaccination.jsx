@@ -133,13 +133,13 @@ const Vaccination = () => {
                     </>}
                    {isModalOpen &&  <AddVaccineModal
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                onClose={() => {setError(null);setIsModalOpen(false)}}
                 onSubmit={handleAddVaccineDrive}
                 error={error}
             />}
            {isEditModalOpen && <EditVaccineModal
                 isOpen={isEditModalOpen}
-                onClose={() => setIsEditModalOpen(false)}
+                onClose={() => {setError(null);setIsEditModalOpen(false)}}
                 onSubmit={handleEditVaccineDrive}
                 vaccineData={selectedVaccineData}
                 error={error}
