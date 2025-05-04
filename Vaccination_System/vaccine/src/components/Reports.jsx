@@ -145,14 +145,22 @@ const Reports = () => {
         let currPage = currentPage;
         const currentStudents = filteredStudents
         const tableColumn = ["Name", "ID", "Class", "Vaccine Name", "Vaccine Date", "Vaccination Status"];
-        while (currPage <= totalPages) {
-            await getAllStudents(currPage + 1, 10).then((res) => {
-                currentStudents.push(...res.students);
+        let currentStudents = []
+        if (filteredStudents.length === students.length) {
+            let currPage = currentPage;
+            currentStudents = filteredStudents
+            while (currPage <= totalPages) {
+                await getAllStudents(currPage + 1, 10).then((res) => {
+                    currentStudents.push(...res.students);
+                }
+                ).catch((err) => {
+                    console.log(err);
+                })
+                currPage++;
             }
-            ).catch((err) => {
-                console.log(err);
-            })
-            currPage++;
+        }
+        else{
+            currentStudents = filteredStudents
         }
         const tableRows = currentStudents.flatMap((student) =>
             student.vaccinationStatus.length > 0
