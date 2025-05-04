@@ -21,6 +21,15 @@ function AppContent() {
           <Route path="/students" element={<Student/>}/>
           <Route path="/vaccination" element={<Vaccination/>} />
           <Route path="/reports" element={<Reports/>} />
+          <Route
+            path="*"
+            element={
+              <div style={{ textAlign: 'center', marginTop: '50px' }}>
+                <h1>404 - Page Not Found</h1>
+                <p>The page you are looking for does not exist.</p>
+              </div>
+            }
+          />
         </Routes>
       </div>
     </div>
