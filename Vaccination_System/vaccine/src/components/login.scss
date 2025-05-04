@@ -12,6 +12,16 @@
     object-fit: contain;
 }
 
+.session-expired-message {
+    background-color: #f8d7da; 
+    color: #721c24;
+    border: 1px solid #f5c6cb; 
+    padding: 10px; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    text-align: center; 
+}
+
 .login_image_container {
     flex: 1;
     display: flex;
