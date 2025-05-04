@@ -29,7 +29,7 @@ const EditVaccineModal = ({ isOpen, onClose, onSubmit, vaccineData,error }) => {
         if (date !== vaccineData.date) vaccineDataNew.date = date;
         if (available !== vaccineData.available) vaccineDataNew.available = available;
         if (classes !== vaccineData.applicableClasses?.join(", ")) {
-            vaccineDataNew.classes = classes.split(",").map((cls) => cls.trim()); 
+            vaccineDataNew.applicableClasses = classes.split(",").map((cls) => cls.trim()); 
         }
         onSubmit(vaccineData.vaccineId, vaccineDataNew); 
     };
