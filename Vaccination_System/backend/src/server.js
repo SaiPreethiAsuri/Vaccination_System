@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 const express=require('express');
-
+const adminModel=require('./models/AdminModel')
 const cors=require('cors')
 const app=express()
 
@@ -27,15 +27,15 @@ mongoose.connect(vaccineConfig.database.url).then(() => console.log('Connected t
     .catch(err => console.error('Could not connect to MongoDB', err));
 
 
-    // const firstUser=async()=>{
-    //     const user=new adminModel({
-    //         username:'admin',
-    //         password:'admin',
-    //     })
-    //     await user.save()
-    // }
+    const firstUser=async()=>{
+        const user=new adminModel({
+            username:'admin',
+            password:'admin',
+        })
+        await user.save()
+    }
     
-    // firstUser()
+    firstUser()
 
 // Port Number
 const PORT = process.env.PORT ||5000;
