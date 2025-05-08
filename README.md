@@ -44,7 +44,8 @@ Ensure you have the following installed on your system:
   MONGO_URI=mongodb://localhost:27017/schoolVaccine
   JWT_SECRET=MySecretKey1028#
   LOG_LEVEL=info
-4. Start the backend server: npm run dev
+4. To register the admin in the application run the command "npm run seed" . This command will generate admin record in your database.
+5. Start the backend server: npm run dev
    The backend server will run on http://localhost:3000.
 ### Frontend Setup
 1. Navigate to the vaccine directory: cd vaccine
