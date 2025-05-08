@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const adminModal = require('../src/models/adminModel');
+const adminModal = require('../src/models/AdminModel');
 require('dotenv').config();
 
 async function seedAdmin() {

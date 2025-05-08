@@ -1,5 +1,5 @@
 const adminModal = require('../models/AdminModel');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')  
 adminLogin=async(req,res)=>{
     try{
         const {username,password}=req.body;
@@ -12,7 +12,7 @@ adminLogin=async(req,res)=>{
             const token=jwt.sign(payload,process.env.JWT_SECRET,{
                 expiresIn:'20m',
             })  
-            res.status(200).json({
+            res.status(200).json({ 
                 message:'Login Successful',
                 token: `Bearer ${token}`
             })
